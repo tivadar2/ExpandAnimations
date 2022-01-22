@@ -176,7 +176,7 @@ function fixateSlideNumber(doc as Object, slide as Object, slideNr as Integer, s
         if shapeType = "com.sun.star.presentation.SlideNumberShape" then
             copy = doc.createInstance("com.sun.star.drawing.TextShape")
             'Call Tools.WritedbgInfo(shape)
-            slide.IsPageNumberVisible = False
+            shape.setString("")
             slide.add(copy)
             copy.setString(CStr(slideNr) & " / " & CStr(slideCount))
             copy.Style = shape.Style
