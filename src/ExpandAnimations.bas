@@ -178,7 +178,10 @@ function fixateSlideNumber(doc as Object, slide as Object, slideNr as Integer, s
             'Call Tools.WritedbgInfo(shape)
             slide.IsPageNumberVisible = False
             slide.add(copy)
-            copy.setString(CStr(slideNr) & " / " & CStr(slideCount))
+            slideNumberText = shape.getString()
+            slideNumberText = replace(slideNumberText, "<number>", CStr(slideNr))
+            slideNumberText = replace(slideNumberText, "<count>", CStr(slideCount))
+            copy.setString(slideNumberText)
             copy.Style = shape.Style
             copy.Text.Style = shape.Text.Style
             copy.Text.CharHeight = shape.Text.CharHeight
@@ -448,4 +451,34 @@ function getEffectId(oEffectNode as Object) as String
             exit function
         end if
     next oData
+end function
+
+' replace string in another string
+' source: https://wiki.openoffice.org/wiki/Documentation/BASIC_Guide/Strings_(Runtime_Library)
+function replace(source as String, search as String, newPart as String) as String
+  Dim result as String
+  Dim startPos as Long
+  Dim currentPos as Long
+ 
+  result = ""
+  startPos = 1
+  currentPos = 1
+ 
+  if search = "" then
+    result = source
+  else 
+    do while currentPos <> 0
+      currentPos = InStr(startPos, source, search)
+      if currentPos <> 0 then
+        result = result + Mid(source, startPos, _
+        currentPos - startPos)
+        result = result + newPart
+        startPos = currentPos + Len(search)
+      else
+        result = result + Mid(source, startPos, Len(source))
+      end if                ' Position <> 0
+    loop 
+  end if 
+ 
+  replace = result
 end function
